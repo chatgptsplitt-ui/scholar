@@ -31,18 +31,24 @@ class UserProfile:
             payload["major"] = self.major
         if self.school:
             payload["school"] = self.school
-        payload.update(self.metadata)
+        payload.update({key: str(value) for key, value in self.metadata.items() if value is not None})
         return payload
 
     def matches_tags(self, tags: Iterable[str]) -> bool:
         """Return True when the profile matches the provided eligibility tags."""
-        normalized_profile = {key.lower(): value.lower() for key, value in self.metadata.items()}
-        normalized_profile.update({
-            "major": (self.major or "").lower(),
-            "school": (self.school or "").lower(),
-        })
+        values = [value.lower() for value in self.metadata.values()]
+        if self.major:
+            values.append(self.major.lower())
+        if self.school:
+            values.append(self.school.lower())
+        token_set = {
+            token
+            for value in values
+            for token in value.replace("/", " ").replace("-", " ").split()
+            if token
+        }
         for tag in tags:
-            expected = tag.lower()
-            if expected and expected not in normalized_profile.values():
+            expected = tag.lower().strip()
+            if expected and expected not in token_set and all(expected not in value for value in values):
                 return False
         return True

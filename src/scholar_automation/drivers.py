@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from .page_understanding import PageElement, PageSnapshot
 
@@ -12,7 +12,7 @@ from .page_understanding import PageElement, PageSnapshot
 class FakePage:
     url: str
     text: str
-    links: List[str]
+    links: List[Tuple[str, str]]
     elements: List[PageElement]
     form_values: Dict[str, str] = field(default_factory=dict)
 
@@ -34,7 +34,7 @@ class InMemoryDriver:
 
     async def extract_links(self) -> List[str]:
         await asyncio.sleep(0)
-        return list(self._current.links)
+        return [target for _, target in self._current.links]
 
     async def extract_text(self) -> str:
         await asyncio.sleep(0)
@@ -46,9 +46,9 @@ class InMemoryDriver:
 
     async def click(self, selector: str) -> None:
         await asyncio.sleep(0)
-        for link in self._current.links:
-            if selector in link:
-                await self.goto(link)
+        for handle, target in self._current.links:
+            if selector == handle or selector == target:
+                await self.goto(target)
                 return
 
     async def fill(self, selector: str, value: str) -> None:

@@ -30,7 +30,7 @@ class FormDriver(Protocol):
 class FieldDescriptor:
     selector: str
     label: str
-    field_type: str
+    field_type: str | None = None
 
 
 @dataclass

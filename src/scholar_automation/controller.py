@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import re
 from typing import Iterable, List
 
 from .discovery import Opportunity, ScholarshipDiscoveryEngine
@@ -62,11 +63,34 @@ class AutomationController:
         snapshot = await self._navigator.snapshot()
         understanding_state = self._navigator.understanding.analyze(snapshot)
         fields = [
-            FieldDescriptor(selector=selector, label=selector.split("-")[-1], field_type="")
-            for selector in understanding_state.form_fields
+            FieldDescriptor(
+                selector=field.selector,
+                label=self._normalize_label(field.label),
+                field_type=field.field_type,
+            )
+            for field in understanding_state.form_fields
         ]
         essays = [
             EssayPrompt(selector=prompt.selector, prompt=prompt.text or "", word_limit=None)
             for prompt in understanding_state.essay_prompts
         ]
         return FormPlan(fields=fields, essays=essays)
+
+    @staticmethod
+    def _normalize_label(label: str) -> str:
+        sanitized = re.sub(r"[^a-z0-9]+", "_", label.lower()).strip("_")
+        mapping = {
+            "full_name": "name",
+            "first_name": "name",
+            "last_name": "name",
+            "email_address": "email",
+            "phone_number": "phone",
+            "telephone": "phone",
+            "mobile": "phone",
+            "grade_point_average": "gpa",
+            "field_of_study": "major",
+            "area_of_study": "major",
+            "university": "school",
+            "college": "school",
+        }
+        return mapping.get(sanitized, sanitized or label)

@@ -29,8 +29,15 @@ class PageSnapshot:
 class PageState:
     snapshot: PageSnapshot
     available_actions: List[PageAction] = field(default_factory=list)
-    form_fields: List[str] = field(default_factory=list)
+    form_fields: List["FormField"] = field(default_factory=list)
     essay_prompts: List[PageElement] = field(default_factory=list)
+
+
+@dataclass
+class FormField:
+    selector: str
+    label: str
+    field_type: str
 
 
 class PageUnderstandingEngine:
@@ -42,7 +49,12 @@ class PageUnderstandingEngine:
             for element in snapshot.elements
             if element.visible and element.role in {"button", "link", "submit"} and element.text
         ]
-        form_fields = [element.selector for element in snapshot.elements if element.role == "input" and element.visible]
+        form_fields = [
+            FormField(selector=element.selector, label=element.text or element.selector, field_type=element.role)
+            for element in snapshot.elements
+            if element.role in {"input", "select", "checkbox", "radio", "textarea", "email", "number"}
+            and element.visible
+        ]
         essay_prompts = [
             element
             for element in snapshot.elements

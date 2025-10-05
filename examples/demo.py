@@ -14,7 +14,6 @@ from scholar_automation import (
     UserProfile,
 )
 from scholar_automation.drivers import FakePage, InMemoryDriver
-from scholar_automation.forms import EssayPrompt, FieldDescriptor, FormPlan
 from scholar_automation.page_understanding import PageElement
 
 
@@ -33,7 +32,7 @@ async def main() -> None:
         "https://start": FakePage(
             url="https://start",
             text="STEM Scholars Program\nEligibility: Computer Science majors",
-            links=["https://application"],
+            links=[("#apply", "https://application")],
             elements=[
                 PageElement(selector="#apply", role="button", text="Apply"),
             ],
@@ -46,7 +45,7 @@ async def main() -> None:
                 PageElement(selector="#input-name", role="input", text="Name"),
                 PageElement(selector="#input-email", role="input", text="Email"),
                 PageElement(selector="#input-major", role="input", text="Major"),
-                PageElement(selector="#essay-purpose", role="textarea", text="Essay"),
+                PageElement(selector="#essay-purpose", role="textarea", text="Essay prompt: Describe your goals."),
             ],
         ),
     }
@@ -66,19 +65,6 @@ async def main() -> None:
         submissions=submissions,
         logger=logger,
     )
-
-    # Override form plan building to include essay prompts for demo simplicity.
-    async def custom_plan() -> FormPlan:
-        snapshot = await navigator.snapshot()
-        fields = [
-            FieldDescriptor(selector="#input-name", label="name", field_type="text"),
-            FieldDescriptor(selector="#input-email", label="email", field_type="email"),
-            FieldDescriptor(selector="#input-major", label="major", field_type="text"),
-        ]
-        essays = [EssayPrompt(selector="#essay-purpose", prompt="Describe your goals.", word_limit=100)]
-        return FormPlan(fields=fields, essays=essays)
-
-    controller._build_form_plan = custom_plan  # type: ignore[assignment]
 
     await controller.run()
     await submissions.submit_all()
