@@ -1,0 +1,83 @@
+[
+  {
+    "id": "glow_puff",
+    "name": "Glow Puff",
+    "growTimeSeconds": 20,
+    "buyCost": 10,
+    "sellValue": 20,
+    "rarity": "Common",
+    "trait": ""
+  },
+  {
+    "id": "spore_bulb",
+    "name": "Spore Bulb",
+    "growTimeSeconds": 30,
+    "buyCost": 18,
+    "sellValue": 36,
+    "rarity": "Common",
+    "trait": "Bioluminescent: +10% sell price"
+  },
+  {
+    "id": "cryostalk",
+    "name": "Cryo Stalk",
+    "growTimeSeconds": 45,
+    "buyCost": 28,
+    "sellValue": 60,
+    "rarity": "Uncommon",
+    "trait": ""
+  },
+  {
+    "id": "void_bean",
+    "name": "Void Bean",
+    "growTimeSeconds": 60,
+    "buyCost": 45,
+    "sellValue": 95,
+    "rarity": "Uncommon",
+    "trait": "Phases out: sells for +20% randomly"
+  },
+  {
+    "id": "amber_worm",
+    "name": "Amber Worm",
+    "growTimeSeconds": 90,
+    "buyCost": 70,
+    "sellValue": 140,
+    "rarity": "Rare",
+    "trait": ""
+  },
+  {
+    "id": "nebula_bloom",
+    "name": "Nebula Bloom",
+    "growTimeSeconds": 120,
+    "buyCost": 110,
+    "sellValue": 220,
+    "rarity": "Rare",
+    "trait": "Bioluminescent: +10% sell price"
+  },
+  {
+    "id": "quantum_egg",
+    "name": "Quantum Egg",
+    "growTimeSeconds": 150,
+    "buyCost": 150,
+    "sellValue": 320,
+    "rarity": "Epic",
+    "trait": ""
+  },
+  {
+    "id": "aurora_pod",
+    "name": "Aurora Pod",
+    "growTimeSeconds": 180,
+    "buyCost": 200,
+    "sellValue": 400,
+    "rarity": "Epic",
+    "trait": "Bioluminescent: +10% sell price"
+  },
+  {
+    "id": "mycelia_star",
+    "name": "Mycelia Star",
+    "growTimeSeconds": 220,
+    "buyCost": 260,
+    "sellValue": 520,
+    "rarity": "Legendary",
+    "trait": "Mutation prone"
+  }
+]
